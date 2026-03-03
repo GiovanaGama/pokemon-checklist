@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Checklist Pokémon</title>
+    <style>
+        body {
+            font-family: Arial;
+            padding: 40px;
+            background: #f4f4f4;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            width: 450px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        select, input, button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 12px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #2563eb;
+        }
+
+        .loading {
+            display: none;
+            margin-top: 10px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Checklist Pokémon TCG</h2>
+
+    <label>Filtrar por:</label>
+    <select id="tipo">
+        <option value="illustrator">Artista</option>
+        <option value="set">Set</option>
+        <option value="series">Coleção</option>
+        <option value="name">Nome do Pokemon</option>
+    </select>
+
+    <label>Digite o valor:</label>
+    <input type="text" id="valor" placeholder="Ex: Komiya">
+
+    <button onclick="buscar()">Gerar Excel</button>
+
+    <div class="loading" id="loading">Gerando arquivo...</div>
+</div>
+
+<script>
+async function buscar() {
+
+    const tipo = document.getElementById("tipo").value;
+    const valor = document.getElementById("valor").value;
+    const loading = document.getElementById("loading");
+
+    loading.style.display = "block";
+
+    const response = await fetch("/buscar", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            tipo: tipo,
+            valor: valor
+        })
+    });
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "pokemons.xlsx";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    loading.style.display = "none";
+}
+</script>
+
+</body>
+</html>

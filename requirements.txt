@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+tcgdexsdk
+aiohttp
+openpyxl
+pillow
+jinja2
