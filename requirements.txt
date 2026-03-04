@@ -1,6 +1,6 @@
 fastapi
 uvicorn
-tcgdexsdk
+tcgdex-sdk
 aiohttp
 openpyxl
 pillow
